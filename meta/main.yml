@@ -1,0 +1,23 @@
+dependencies:
+  - src: jumperfly.ansible_common
+    version: v0.1.0
+  - src: jumperfly.ssl_cert
+    version: master
+    ssl_cert_storage: k8s-secret
+    ssl_cert_ca_delegate_name: "{{ tiller_cert_ca_delegate_name }}"
+    ssl_cert_type: server
+    ssl_cert_hosts: "{{ tiller_cert_hosts }}"
+    ssl_cert_subject: "{{ tiller_cert_subject }}"
+    ssl_cert_k8s_secret_name: tiller-secret
+    ssl_cert_k8s_secret_namespace: "{{ tiller_namespace }}"
+
+galaxy_info:
+  role_name: tiller
+  author: jumperfly
+  description: ansible-role-tiller
+  license: Apache
+  min_ansible_version: "2.0"
+  platforms:
+    - name: EL
+      versions:
+        - "7"

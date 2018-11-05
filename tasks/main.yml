@@ -1,0 +1,117 @@
+- name: Deploy tiller
+  k8s:
+    host: http://localhost:8080
+    definition: "{{ item }}"
+  loop_control:
+    label: "{{ item.kind }}/{{ item.metadata.name }}"
+  loop:
+    - apiVersion: v1
+      kind: ServiceAccount
+      metadata:
+        name: tiller
+        namespace: "{{ tiller_namespace }}"
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRoleBinding
+      metadata:
+        name: tiller
+      roleRef:
+        apiGroup: rbac.authorization.k8s.io
+        kind: ClusterRole
+        name: "{{ tiller_cluster_role }}"
+      subjects:
+        - kind: ServiceAccount
+          name: tiller
+          namespace: "{{ tiller_namespace }}"
+    - apiVersion: extensions/v1beta1
+      kind: Deployment
+      metadata:
+        name: tiller-deploy
+        namespace: "{{ tiller_namespace }}"
+        labels:
+          app: helm
+          name: tiller
+      spec:
+        replicas: 1
+        strategy:
+          type: RollingUpdate
+          rollingUpdate:
+            maxSurge: 1
+            maxUnavailable: 1
+        selector:
+          matchLabels:
+            app: helm
+            name: tiller
+        template:
+          metadata:
+            labels:
+              app: helm
+              name: tiller
+          spec:
+            serviceAccountName: tiller
+            containers:
+            - name: tiller
+              image: gcr.io/kubernetes-helm/tiller:v{{ tiller_version }}
+              imagePullPolicy: IfNotPresent
+              env:
+              - name: TILLER_NAMESPACE
+                value: "{{ tiller_namespace }}"
+              - name: TILLER_HISTORY_MAX
+                value: "0"
+              - name: TILLER_TLS_VERIFY
+                value: "1"
+              - name: TILLER_TLS_ENABLE
+                value: "1"
+              - name: TILLER_TLS_CERTS
+                value: /etc/certs
+              readinessProbe:
+                failureThreshold: 3
+                httpGet:
+                  path: /readiness
+                  port: 44135
+                  scheme: HTTP
+                initialDelaySeconds: 1
+                periodSeconds: 10
+                successThreshold: 1
+                timeoutSeconds: 1
+              livenessProbe:
+                failureThreshold: 3
+                httpGet:
+                  path: /liveness
+                  port: 44135
+                  scheme: HTTP
+                initialDelaySeconds: 1
+                periodSeconds: 10
+                successThreshold: 1
+                timeoutSeconds: 1
+              ports:
+              - containerPort: 44134
+                name: tiller
+                protocol: TCP
+              - containerPort: 44135
+                name: http
+                protocol: TCP
+              volumeMounts:
+              - mountPath: /etc/certs
+                name: tiller-certs
+                readOnly: true
+            volumes:
+            - name: tiller-certs
+              secret:
+                secretName: tiller-secret
+    - apiVersion: v1
+      kind: Service
+      metadata:
+        name: tiller-deploy
+        namespace: "{{ tiller_namespace }}"
+        labels:
+          app: helm
+          name: tiller
+      spec:
+        selector:
+          app: helm
+          name: tiller
+        ports:
+        - name: tiller
+          port: 44134
+          protocol: TCP
+          targetPort: tiller
