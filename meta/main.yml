@@ -2,7 +2,7 @@ dependencies:
   - src: jumperfly.ansible_common
     version: v0.2.0
   - src: jumperfly.ssl_cert
-    version: v0.2.0
+    version: v0.2.1
     ssl_cert_storage: k8s-secret
     ssl_cert_ca_delegate_name: "{{ tiller_cert_ca_delegate_name }}"
     ssl_cert_type: server

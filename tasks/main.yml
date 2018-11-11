@@ -1,6 +1,6 @@
 - name: Deploy tiller
   k8s:
-    host: http://localhost:8080
+    kubeconfig: /etc/kubernetes/kubeconfig-local
     definition: "{{ item }}"
   loop_control:
     label: "{{ item.kind }}/{{ item.metadata.name }}"
