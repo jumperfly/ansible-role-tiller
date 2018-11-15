@@ -1,11 +1,11 @@
 dependencies:
   - src: jumperfly.ssl_cert
-    version: v0.2.1
+    version: v0.3.0
     ssl_cert_storage: k8s-secret
     ssl_cert_ca_delegate_name: "{{ tiller_cert_ca_delegate_name }}"
     ssl_cert_type: server
     ssl_cert_hosts: "{{ tiller_cert_hosts }}"
-    ssl_cert_subject: "{{ tiller_cert_subject }}"
+    ssl_cert_subject_common_name: "{{ tiller_cert_subject_common_name }}"
     ssl_cert_k8s_secret_name: tiller-secret
     ssl_cert_k8s_secret_namespace: "{{ tiller_namespace }}"
 

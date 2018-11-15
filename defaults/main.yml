@@ -8,10 +8,4 @@ tiller_cert_ca_delegate_name: tiller-ca
 tiller_cert_hosts:
   - tiller-server
   - 127.0.0.1
-tiller_cert_subject:
-  common_name: tiller-server
-  country: GB
-  city: London
-  state: Greater London
-  organization_name: Ansible Certificate
-  organizational_unit_name: Kubernetes
+tiller_cert_subject_common_name: tiller-server
