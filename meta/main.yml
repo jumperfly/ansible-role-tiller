@@ -6,7 +6,7 @@ dependencies:
     ssl_cert_type: server
     ssl_cert_hosts: "{{ tiller_cert_hosts }}"
     ssl_cert_subject_common_name: "{{ tiller_cert_subject_common_name }}"
-    ssl_cert_k8s_secret_name: tiller-secret
+    ssl_cert_name: tiller-secret
     ssl_cert_k8s_secret_namespace: "{{ tiller_namespace }}"
 
 galaxy_info:
