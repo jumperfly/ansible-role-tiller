@@ -4,8 +4,5 @@ tiller_namespace: kube-system
 tiller_cluster_role: kube-admin
 
 # SSL Configuration
-tiller_cert_ca_delegate_name: tiller-ca
-tiller_cert_hosts:
-  - tiller-server
-  - 127.0.0.1
-tiller_cert_subject_common_name: tiller-server
+tiller_secret_name: tiller-secret
+tiller_secret_namespace: kube-system
