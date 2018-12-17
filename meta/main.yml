@@ -1,6 +1,7 @@
 galaxy_info:
   role_name: tiller
   author: jumperfly
+  company: jumperfly
   description: ansible-role-tiller
   license: Apache
   min_ansible_version: "2.0"
