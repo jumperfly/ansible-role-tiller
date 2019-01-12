@@ -97,7 +97,7 @@
             volumes:
             - name: tiller-certs
               secret:
-                secretName: tiller-secret
+                secretName: "{{ tiller_secret_name }}"
     - apiVersion: v1
       kind: Service
       metadata:
