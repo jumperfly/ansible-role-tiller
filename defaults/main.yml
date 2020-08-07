@@ -2,7 +2,6 @@
 tiller_namespace: kube-system
 tiller_cluster_role: cluster-admin
 tiller_history_max: 0
-tiller_tls_certs: /etc/cert
 tiller_kubeconfig_path: /etc/kubernetes/kubeconfig-local
 
 # Tiller repository
@@ -15,3 +14,4 @@ tiller_secret_name: tiller-secret
 tiller_secret_namespace: kube-system
 tiller_tls_verify: 1
 tiller_tls_enable: 1
+tiller_tls_certs: /etc/cert
