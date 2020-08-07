@@ -98,7 +98,7 @@
             - name: tiller-certs
               secret:
                 secretName: "{{ tiller_secret_name }}"
-                optional: true
+                optional: "{{ 'false' if is defined tiller_tls_enable else 'true' }}"
     - apiVersion: v1
       kind: Service
       metadata:
