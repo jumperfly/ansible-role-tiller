@@ -35,6 +35,8 @@ The `jumperfly.ssl_cert` role can be used to generate them if required. For exam
 |-----|-------------|---------|
 | `tiller_secret_name`      | The name of the kubernetes secret holding the tiller certificates. | `tiller-secret` |
 | `tiller-secret_namespace` | The name of the kubernetes secret holding the tiller certificates. | `kube-system` |
-| `tiller_tls_verify`       | If set, verify remote certificates. | `1` |
-| `tiller_tls_enable`       | If set, install Tiller with TLS.    | `1` |
+| `tiller_tls_verify`       | If set`*`, verify remote certificates. | `1` |
+| `tiller_tls_enable`       | If set`*`, install Tiller with TLS.    | `1` |
 | `tiller_tls_certs`        | Certificates location.              | `/etc/cert` |
+
+`*` If set: In the current Tiller version, the only way to disable `tiller_tls_verify` and `tiller_tls_enable` is to have them empty. [Here](https://github.com/helm/helm/blob/17c2272490c21bf70c4ae6b8dd7d312cb020307f/cmd/tiller/tiller.go#L279-L280) is the corresponding code.
