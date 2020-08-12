@@ -5,11 +5,15 @@ SSL is enabled by default and requires certificates to be configured.
 See the [SSL Configuration](#ssl-configuration) section for more information.
 
 ## Configuration
-| Key | Description |
-|-----|-------------|
-| `tiller_version`      | The version of tiller to install. |
-| `tiller_namespace`    | The namespace to install tiller. |
-| `tiller_cluster_role` | The cluster role to grant to the tiller service account. |
+| Key | Description | Default |
+|-----|-------------|---------|
+| `tiller_registry`         | The registry where is the tiller image. | `grc.io` |
+| `tiller_repository`       | The repository where is the tiller image. | `kubernetes-helm/tiller` |
+| `tiller_tag`              | The tiller image tag. | `v2.12.0` |
+| `tiller_namespace`        | The namespace to install tiller. | `kube-system` |
+| `tiller_cluster_role`     | The cluster role to grant to the tiller service account. | `cluster-admin` |
+| `tiller_history_max`      | Limits the maximum number of revisions saved per release. | `0` (no limit)
+| `tiller_kubeconfig_path`  | The path of your kubeconfig file. | `/etc/kubernetes/kubeconfig-local`
 
 ## SSL Configuration
 Keys and certificates are loaded from the locations shown below.
@@ -27,7 +31,12 @@ The `jumperfly.ssl_cert` role can be used to generate them if required. For exam
       - 127.0.0.1
 ```
 
-| Key | Description |
-|-----|-------------|
-| `tiller_secret_name`      | The name of the kubernetes secret holding the tiller certificates. |
-| `tiller-secret_namespace` | The name of the kubernetes secret holding the tiller certificates. |
+| Key | Description | Default |
+|-----|-------------|---------|
+| `tiller_secret_name`      | The name of the kubernetes secret holding the tiller certificates. | `tiller-secret` |
+| `tiller-secret_namespace` | The name of the kubernetes secret holding the tiller certificates. | `kube-system` |
+| `tiller_tls_verify`       | If set`*`, verify remote certificates. | `1` |
+| `tiller_tls_enable`       | If set`*`, install Tiller with TLS.    | `1` |
+| `tiller_tls_certs`        | Certificates location.              | `/etc/cert` |
+
+`*` If set: In the current Tiller version, the only way to disable `tiller_tls_verify` and `tiller_tls_enable` is to have them empty. [Here](https://github.com/helm/helm/blob/17c2272490c21bf70c4ae6b8dd7d312cb020307f/cmd/tiller/tiller.go#L279-L280) is the corresponding code.

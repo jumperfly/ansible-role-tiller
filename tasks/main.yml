@@ -1,6 +1,6 @@
 - name: Deploy tiller
   k8s:
-    kubeconfig: /etc/kubernetes/kubeconfig-local
+    kubeconfig: "{{ tiller_kubeconfig_path }}"
     definition: "{{ item }}"
   loop_control:
     label: "{{ item.kind }}/{{ item.metadata.name }}"
@@ -50,19 +50,19 @@
             serviceAccountName: tiller
             containers:
             - name: tiller
-              image: gcr.io/kubernetes-helm/tiller:v{{ tiller_version }}
+              image: '{{tiller_registry}}/{{tiller_repository}}:{{tiller_tag}}'
               imagePullPolicy: IfNotPresent
               env:
               - name: TILLER_NAMESPACE
                 value: "{{ tiller_namespace }}"
               - name: TILLER_HISTORY_MAX
-                value: "0"
+                value: "{{ tiller_history_max | string }}"
               - name: TILLER_TLS_VERIFY
-                value: "1"
+                value: "{{ tiller_tls_verify | string }}"
               - name: TILLER_TLS_ENABLE
-                value: "1"
+                value: "{{ tiller_tls_enable | string }}"
               - name: TILLER_TLS_CERTS
-                value: /etc/certs
+                value: "{{ tiller_tls_certs }}"
               readinessProbe:
                 failureThreshold: 3
                 httpGet:
@@ -91,13 +91,14 @@
                 name: http
                 protocol: TCP
               volumeMounts:
-              - mountPath: /etc/certs
+              - mountPath: "{{ tiller_tls_certs }}"
                 name: tiller-certs
                 readOnly: true
             volumes:
             - name: tiller-certs
               secret:
                 secretName: "{{ tiller_secret_name }}"
+                optional: "{{ not tiller_tls_enable }}"
     - apiVersion: v1
       kind: Service
       metadata:
