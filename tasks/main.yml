@@ -58,9 +58,9 @@
               - name: TILLER_HISTORY_MAX
                 value: "{{ tiller_history_max }}"
               - name: TILLER_TLS_VERIFY
-                value: "{{ tiller_tls_verify }}"
+                value: "{{ tiller_tls_verify | string }}"
               - name: TILLER_TLS_ENABLE
-                value: "{{ tiller_tls_enable }}"
+                value: "{{ tiller_tls_enable | string }}"
               - name: TILLER_TLS_CERTS
                 value: "{{ tiller_tls_certs }}"
               readinessProbe:
@@ -98,7 +98,7 @@
             - name: tiller-certs
               secret:
                 secretName: "{{ tiller_secret_name }}"
-                optional: "{{ 'false' if is defined tiller_tls_enable else 'true' }}"
+                optional: "{{ not tiller_tls_enable }}"
     - apiVersion: v1
       kind: Service
       metadata:
