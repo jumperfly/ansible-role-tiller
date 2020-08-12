@@ -56,7 +56,7 @@
               - name: TILLER_NAMESPACE
                 value: "{{ tiller_namespace }}"
               - name: TILLER_HISTORY_MAX
-                value: "{{ tiller_history_max }}"
+                value: "{{ tiller_history_max | string }}"
               - name: TILLER_TLS_VERIFY
                 value: "{{ tiller_tls_verify | string }}"
               - name: TILLER_TLS_ENABLE
